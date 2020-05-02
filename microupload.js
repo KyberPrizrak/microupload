@@ -21,7 +21,7 @@
  * along with microlightbox. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author KyberPrizrak (www.kyberprizrak.ru)
- * @version 0.1.5 - 2020.05.02 10:08:00 GMT+3
+ * @version 0.1.6 - 2020.05.02 14:59:00 GMT+3
  */
 
 (function() {
@@ -70,8 +70,7 @@
       elm.addEventListener('change', function(event) {
         microupload_addfiles(event.target.files, opt);
       });
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   /**
@@ -92,8 +91,10 @@
       if (typeof(opt['extensions']) !== 'string') opt['extensions'] = '*';
       if (!(opt['max_file_size'] > 0)) opt['max_file_size'] = 0;
 
-      for (var i = 0; i < files.length; i++) {
-        microupload_send(files[i], opt);
+      if (files) {
+        for (var i = 0; i < files.length; i++) {
+          microupload_send(files[i], opt);
+        }
       }
     } catch (e) {
       alert('microupload error');
@@ -150,7 +151,6 @@
       obj_item.className = "microupload_item";
       obj_container.appendChild(obj_item);
 
-
       if (opt['preview']) {
         var obj_image_wrapper = document.createElement('div');
         obj_image_wrapper.className = "microupload_preview microupload_preview_empty";
@@ -161,8 +161,8 @@
             obj_image.onload = function() {
               var original_width = obj_image.width;
               var original_height = obj_image.height;
-       
-              if((original_width > 0) && (original_height > 0)) {
+
+              if ((original_width > 0) && (original_height > 0)) {
                 if ((original_width > opt['preview_max_width']) || (original_height > opt['preview_max_height'])) {
                   var dw = opt['preview_max_width'] / original_width;
                   var dh = opt['preview_max_height'] / original_height;
@@ -174,14 +174,11 @@
                     obj_image.height = opt['preview_max_height'];
                   }
                 }
-       
-                if(obj_image_wrapper)
-                {
-                  //obj_item.appendChild(obj_image);
+
+                if (obj_image_wrapper) {
                   obj_image_wrapper.className = "microupload_preview";
                   obj_image.className = "microupload_preview_img";
                   obj_image_wrapper.appendChild(obj_image);
-                  //obj_item.appendChild(obj_image_wrapper);
                 }
               }
             }
@@ -226,6 +223,7 @@
       }
     }
 
+    //call onbeforesubmit
     if (opt['onbeforesubmit']) {
       if (!opt['onbeforesubmit'](file, file_id)) {
         error_macros("onbeforesubmit");
@@ -254,7 +252,6 @@
               obj_progress_value.innerText = '100%';
             }
             if (obj_item) {
-              //obj_progress.parentElement.removeChild(obj_progress);
               obj_item.className += " microupload_item_complete";
             }
           } else {

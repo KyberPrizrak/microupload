@@ -11,7 +11,7 @@ microupload supports all major browsers including Internet Explorer 10 and above
 
 ## Quick start
 
-1) Copy *microupload.min.js* (4.1 kb) and *microupload.css* (2 kb)
+1) Copy *microupload.min.js* (4 kb) and *microupload.css* (2 kb)
 2) Add to &lt;head&gt;:
 
 ```html
@@ -42,12 +42,16 @@ microupload supports all major browsers including Internet Explorer 10 and above
 
 ```js
 <script>
-    microupload(elm[, opt]);
+    microupload(elm[, opt]);//add handler for input[type=file]
+    microupload_addfiles(files[, opt]);//run file upload programmatically
 </script>
 ```
 **elm**:
 1. DOM-element (result of document.getElementById)
 2. string: CSS selector (syntax querySelectorAll)
+ 
+**files**:
+FileList (see JavaScript File API), or array of File (see JavaScript File API).
 
 **opt**: object {optionname1:value[, optionname2:value2]}
 
@@ -71,12 +75,13 @@ microupload supports all major browsers including Internet Explorer 10 and above
  | oncomplete             | callback     | undefined     | function(file, file_id, responseText){return true;} - функция, которая будет вызываться после завершения отправки файла. Где responseText - результат запроса. (параметры file и file_id - аналогичны onerror). Важно: крайне желательно проверять ответ сервера! Функция возвращает true - если ответ сервера корректный. |
  | ontrycancel            | callback     | undefined     | function(file, file_id){return true;} - функция, которая будет вызываться при попытке пользователя отменить загрузку файла. (параметры file и file_id - аналогичны onerror). Функция возвращает true - если файл разрешено удалить. |
  
- 
 ## Examples
  
 ```js
 <script>
     microupload("#id", {url:'/upload.php', container:'#form_attach', extensions:'jpeg,jpg,bmp,png,gif', max_file_size:15*1024*1024, preview: true});
     microupload("input[type=file]", {url:'/upload.php', container:'#form_attach'});
+
+    microupload_addfiles(event.dataTransfer.files, {url: '/upload.php'});
 </script>
 ```

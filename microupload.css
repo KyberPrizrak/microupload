@@ -1,18 +1,38 @@
+/* CSS Reset */
 
 .microupload_item,
-.microupload_filename,
-.microupload_cancel,
 .microupload_preview,
+.microupload_preview_img,
+.microupload_filename,
 .microupload_progress,
 .microupload_progress_value,
-.microupload_item_error {
+.microupload_cancel {
   font-size: 0;
   padding: 0;
   margin: 0;
   border: 0;
   box-sizing: border-box;
   display: block;
+  /*overflow: visible;
+  line-height: normal;
+  float: none;
+  position: static;
+  background: transparent;
+  opacity: 1;
+  font-weight: normal;
+  text-decoration: none;
+  text-align: left;
+  vertical-align: baseline;*/
 }
+
+.microupload_item_error,
+.microupload_item_complete,
+.microupload_preview_empty {
+  /* inherit */
+}
+
+
+/* microupload styles */
 
 .microupload_item {
   margin-top: 5px;
@@ -22,8 +42,13 @@
   opacity: 0.5;
 }
 
-.microupload_item_complete .microupload_preview {
-  opacity: 1;
+.microupload_item .microupload_preview .microupload_preview_img {
+  display: inline-block;
+}
+
+.microupload_item .microupload_filename {
+  display: inline-block;
+  font-size: 14px;
 }
 
 .microupload_item .microupload_progress {
@@ -35,21 +60,10 @@
   overflow: hidden;
 }
 
-.microupload_item_complete .microupload_progress {
-  display: none;
-}
-
 .microupload_item .microupload_progress .microupload_progress_value {
   height: 8px;
   background: #00b000;
   display: inline-block;
-}
-
-.microupload_item .microupload_filename {
-  display: inline-block;
-  font-size: 14px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .microupload_item .microupload_cancel {
@@ -73,6 +87,9 @@
   background: #111111;
 }
 
+
+/* microupload newstate styles */
+
 .microupload_item_error .microupload_filename {
   color: red;
   text-decoration: line-through;
@@ -84,4 +101,12 @@
 
 .microupload_item_error .microupload_progress .microupload_progress_value {
   background: #b00000;
+}
+
+.microupload_item_complete .microupload_preview {
+  opacity: 1;
+}
+
+.microupload_item_complete .microupload_progress {
+  display: none;
 }

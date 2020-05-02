@@ -1,8 +1,7 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="ru">
+<!DOCTYPE html>
+<html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="content-language" content="ru">
     <title>microupload</title>
     <link rel="stylesheet" href="microupload.css" type="text/css">
     <script src="microupload.js" type="text/javascript"></script>
@@ -59,6 +58,8 @@
         border: 0;
         box-sizing: border-box;
         cursor: pointer;
+        width: 0;
+        height: 0;
       }
 
       .microupload_preview {
@@ -144,6 +145,8 @@
         width: 100px;
         overflow: hidden;
         margin-top: 2px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
 
       .design6 .microupload_item .microupload_preview {
@@ -160,11 +163,6 @@
       .design6 .microupload_item .microupload_preview .microupload_preview_img {
         display:inline-block;
         vertical-align:middle;
-      }
-
-      .design6 .microupload_item .microupload_progress {
-        width: 100px;
-        background: #646464;
       }
 
       .design6 .microupload_item .microupload_cancel {
@@ -185,12 +183,22 @@
       }
  
       .design6 .microupload_item .microupload_progress {
+        width: 100px;
+        background: #646464;
         height: 4px;
         margin: 0;
       }
      
       .design6 .microupload_item .microupload_progress .microupload_progress_value {
         height: 4px;
+      }
+
+      .design6 .microupload_item_error .microupload_progress {
+        background: #ff7777;
+      }
+
+      .design6 .microupload_item_error .microupload_progress .microupload_progress_value {
+        background: #b00000;
       }
 
       .design6 .microupload_item_error .microupload_preview {
@@ -231,6 +239,8 @@
         width: 150px;
         overflow: hidden;
         vertical-align: top;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
 
       .design8 .microupload_item_complete .microupload_progress {
@@ -267,7 +277,7 @@
     <form class="form2" method="post" action="form.php" target="_blank">
       <textarea id="form2_textarea" name="text2"></textarea>
       <div id="form2_attach"></div>
-      <input type="file" id="form2_file" accept="image/*" multiple="multiple"><br>
+      <input type="file" id="form2_file" multiple="multiple"><br>
       <input type="submit" name="submit" value="Send">
     </form>
 
@@ -287,9 +297,8 @@
         cancelable: true,
         onerror: function(errorcode, filedata, fileid) {
           console.log(['onerror', errorcode, filedata, fileid]);
-          if(errorcode==='maxsize')
-          {
-            alert('File '+filedata.name+' too large!');
+          if(errorcode==='maxsize') {
+            alert('File ' + filedata.name + ' too large!');
           }
         },
         oncomplete: function mycomplete(file, file_id, responseText) {
@@ -301,8 +310,7 @@
           if(obj)
           {
             var data = responseText;
-            if((data.substr(0, 10) == '[response]') && (data.substr(data.length - 11) == '[/response]') && (data.length > 21))
-            {
+            if ((data.substr(0, 10) == '[response]') && (data.substr(data.length - 11) == '[/response]') && (data.length > 21)) {
               obj_input = document.createElement('input');
               obj_input.value = data.substr(10, data.length - 21);
               obj_input.setAttribute("type", 'hidden');
@@ -331,25 +339,18 @@
       microupload('#form2_file', {
         url: 'upload.php',
         container: '#form2_attach',
-        preview: true,
-        //extensions: 'jpeg,jpg,bmp,png,gif',
-        //max_file_size: 15*1024*1024
+        preview: true
       });
 
       /*** drag & drop sample ***/
 
       document.getElementById("form2_textarea").addEventListener('drop', function(event) {
-        if(event.dataTransfer.files.length)
-        {
+        if (event.dataTransfer.files.length) {
           event.preventDefault();
-       
           microupload_addfiles(event.dataTransfer.files, {
             url: 'upload.php',
             container: '#form2_attach',
-            preview: true,
-            //extensions: 'jpeg,jpg,bmp,png,gif',
-            //max_file_size: 15*1024*1024,
-            //cancelable: true
+            preview: true
           });
           this.style.border = '';
         }
