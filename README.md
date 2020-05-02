@@ -1,4 +1,4 @@
-# microupload
+п»ї# microupload
 Small ajax file upload with preview. Pure JavaScript + CSS. No dependencies!
 
 ## Browser support
@@ -58,22 +58,22 @@ FileList (see JavaScript File API), or array of File (see JavaScript File API).
  ### Available options
  | Key                    |  Type        | Default value | Description |
  |------------------------|:------------:|:-------------:|-------------|
- | url                    | string       | '/upload.php' | URL, на который будут отравляться файлы |
- | data                   | object       | undefined     | Дополнительные параметры для POST-запроса |
- | name                   | string       | 'file'        | Имя файла в POST-запросе |
- | container              | string, Node | undefined     | Контейнер, в котором будет добавляться html-код со статусом загрузки файлов. |
- | preview                | boolean      | undefined     | Отобразить превью файла? (использовать только для изображений!) |
- | preview_max_width      | integer      | 100           | Максимальная ширина preview-изображения. |
- | preview_max_height     | integer      | 100           | Максимальная высота preview-изображения. |
- | cancelable             | boolean      | undefined     | Отобразить кнопку "отменить"? |
- | cancel_text            | string       | '&times;'     | Текст, который будет использоваться в кнопке "отменить" |
- | extensions             | string       | '*'           | Список расширений файлов через "," или "|". Например: 'jpeg|jpg|bmp|png|gif'. Если "*" - разрешен любой формат. |
- | max_file_size          | integer      | 0             | Максимальный размер загружаемого файла в байтах. Если ноль - любой. |
- | onerror                | callback     | undefined     | function(error_code, file, file_id){} - функция, которая будет вызываться при ошибке. Где error_code - string, file - object (из event.target.files), file_id - html id соответствующего элемента (container_tagname), может передаваться undefined (если элемент не был добавлен в container). Возможные коды ошибок: "extension", "maxsize", "network", "onbeforesubmit", "oncomplete", "ontrycancel". |
- | onbeforesubmit         | callback     | undefined     | function(file, file_id){return true;} - функция, которая будет вызываться при попытке отправить файл (параметры file и file_id - аналогичны onerror). |
- | onprogress             | callback     | undefined     | function(file, file_id, percentComplete){} - функция, которая будет вызываться при изменении прогресса отправки файла (обратите внимание, что вызов со значениями 0% и 100% не гарантируется!). Где percentComplete - число, означающее процент выполнения (от 0 до 100). (параметры file и file_id - аналогичны onerror). |
- | oncomplete             | callback     | undefined     | function(file, file_id, responseText){return true;} - функция, которая будет вызываться после завершения отправки файла. Где responseText - результат запроса. (параметры file и file_id - аналогичны onerror). Важно: крайне желательно проверять ответ сервера! Функция возвращает true - если ответ сервера корректный. |
- | ontrycancel            | callback     | undefined     | function(file, file_id){return true;} - функция, которая будет вызываться при попытке пользователя отменить загрузку файла. (параметры file и file_id - аналогичны onerror). Функция возвращает true - если файл разрешено удалить. |
+ | url                    | string       | '/upload.php' | URL, РЅР° РєРѕС‚РѕСЂС‹Р№ Р±СѓРґСѓС‚ РѕС‚СЂР°РІР»СЏС‚СЊСЃСЏ С„Р°Р№Р»С‹ |
+ | data                   | object       | undefined     | Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ POST-Р·Р°РїСЂРѕСЃР° |
+ | name                   | string       | 'file'        | РРјСЏ С„Р°Р№Р»Р° РІ POST-Р·Р°РїСЂРѕСЃРµ |
+ | container              | string, Node | undefined     | РљРѕРЅС‚РµР№РЅРµСЂ, РІ РєРѕС‚РѕСЂРѕРј Р±СѓРґРµС‚ РґРѕР±Р°РІР»СЏС‚СЊСЃСЏ html-РєРѕРґ СЃРѕ СЃС‚Р°С‚СѓСЃРѕРј Р·Р°РіСЂСѓР·РєРё С„Р°Р№Р»РѕРІ. |
+ | preview                | boolean      | undefined     | РћС‚РѕР±СЂР°Р·РёС‚СЊ РїСЂРµРІСЊСЋ С„Р°Р№Р»Р°? (РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РґР»СЏ РёР·РѕР±СЂР°Р¶РµРЅРёР№!) |
+ | preview_max_width      | integer      | 100           | РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ С€РёСЂРёРЅР° preview-РёР·РѕР±СЂР°Р¶РµРЅРёСЏ. |
+ | preview_max_height     | integer      | 100           | РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° preview-РёР·РѕР±СЂР°Р¶РµРЅРёСЏ. |
+ | cancelable             | boolean      | undefined     | РћС‚РѕР±СЂР°Р·РёС‚СЊ РєРЅРѕРїРєСѓ "РѕС‚РјРµРЅРёС‚СЊ"? |
+ | cancel_text            | string       | '&times;'     | РўРµРєСЃС‚, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РєРЅРѕРїРєРµ "РѕС‚РјРµРЅРёС‚СЊ" |
+ | extensions             | string       | '*'           | РЎРїРёСЃРѕРє СЂР°СЃС€РёСЂРµРЅРёР№ С„Р°Р№Р»РѕРІ С‡РµСЂРµР· "," РёР»Рё "|". РќР°РїСЂРёРјРµСЂ: 'jpeg|jpg|bmp|png|gif'. Р•СЃР»Рё "*" - СЂР°Р·СЂРµС€РµРЅ Р»СЋР±РѕР№ С„РѕСЂРјР°С‚. |
+ | max_file_size          | integer      | 0             | РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ Р·Р°РіСЂСѓР¶Р°РµРјРѕРіРѕ С„Р°Р№Р»Р° РІ Р±Р°Р№С‚Р°С…. Р•СЃР»Рё РЅРѕР»СЊ - Р»СЋР±РѕР№. |
+ | onerror                | callback     | undefined     | function(error_code, file, file_id){} - С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё РѕС€РёР±РєРµ. Р“РґРµ error_code - string, file - object (РёР· event.target.files), file_id - html id СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р° (container_tagname), РјРѕР¶РµС‚ РїРµСЂРµРґР°РІР°С‚СЊСЃСЏ undefined (РµСЃР»Рё СЌР»РµРјРµРЅС‚ РЅРµ Р±С‹Р» РґРѕР±Р°РІР»РµРЅ РІ container). Р’РѕР·РјРѕР¶РЅС‹Рµ РєРѕРґС‹ РѕС€РёР±РѕРє: "extension", "maxsize", "network", "onbeforesubmit", "oncomplete", "ontrycancel". |
+ | onbeforesubmit         | callback     | undefined     | function(file, file_id){return true;} - С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё РїРѕРїС‹С‚РєРµ РѕС‚РїСЂР°РІРёС‚СЊ С„Р°Р№Р» (РїР°СЂР°РјРµС‚СЂС‹ file Рё file_id - Р°РЅР°Р»РѕРіРёС‡РЅС‹ onerror). |
+ | onprogress             | callback     | undefined     | function(file, file_id, percentComplete){} - С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё РёР·РјРµРЅРµРЅРёРё РїСЂРѕРіСЂРµСЃСЃР° РѕС‚РїСЂР°РІРєРё С„Р°Р№Р»Р° (РѕР±СЂР°С‚РёС‚Рµ РІРЅРёРјР°РЅРёРµ, С‡С‚Рѕ РІС‹Р·РѕРІ СЃРѕ Р·РЅР°С‡РµРЅРёСЏРјРё 0% Рё 100% РЅРµ РіР°СЂР°РЅС‚РёСЂСѓРµС‚СЃСЏ!). Р“РґРµ percentComplete - С‡РёСЃР»Рѕ, РѕР·РЅР°С‡Р°СЋС‰РµРµ РїСЂРѕС†РµРЅС‚ РІС‹РїРѕР»РЅРµРЅРёСЏ (РѕС‚ 0 РґРѕ 100). (РїР°СЂР°РјРµС‚СЂС‹ file Рё file_id - Р°РЅР°Р»РѕРіРёС‡РЅС‹ onerror). |
+ | oncomplete             | callback     | undefined     | function(file, file_id, responseText){return true;} - С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїРѕСЃР»Рµ Р·Р°РІРµСЂС€РµРЅРёСЏ РѕС‚РїСЂР°РІРєРё С„Р°Р№Р»Р°. Р“РґРµ responseText - СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РїСЂРѕСЃР°. (РїР°СЂР°РјРµС‚СЂС‹ file Рё file_id - Р°РЅР°Р»РѕРіРёС‡РЅС‹ onerror). Р’Р°Р¶РЅРѕ: РєСЂР°Р№РЅРµ Р¶РµР»Р°С‚РµР»СЊРЅРѕ РїСЂРѕРІРµСЂСЏС‚СЊ РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР°! Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ true - РµСЃР»Рё РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР° РєРѕСЂСЂРµРєС‚РЅС‹Р№. |
+ | ontrycancel            | callback     | undefined     | function(file, file_id){return true;} - С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РїСЂРё РїРѕРїС‹С‚РєРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РѕС‚РјРµРЅРёС‚СЊ Р·Р°РіСЂСѓР·РєСѓ С„Р°Р№Р»Р°. (РїР°СЂР°РјРµС‚СЂС‹ file Рё file_id - Р°РЅР°Р»РѕРіРёС‡РЅС‹ onerror). Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ true - РµСЃР»Рё С„Р°Р№Р» СЂР°Р·СЂРµС€РµРЅРѕ СѓРґР°Р»РёС‚СЊ. |
  
 ## Examples
  
