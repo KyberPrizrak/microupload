@@ -1,0 +1,87 @@
+
+.microupload_item,
+.microupload_filename,
+.microupload_cancel,
+.microupload_preview,
+.microupload_progress,
+.microupload_progress_value,
+.microupload_item_error {
+  font-size: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+  display: block;
+}
+
+.microupload_item {
+  margin-top: 5px;
+}
+
+.microupload_item .microupload_preview {
+  opacity: 0.5;
+}
+
+.microupload_item_complete .microupload_preview {
+  opacity: 1;
+}
+
+.microupload_item .microupload_progress {
+  background: #cccccc;
+  width: 80px;
+  display: inline-block;
+  margin: 0 0 0 5px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.microupload_item_complete .microupload_progress {
+  display: none;
+}
+
+.microupload_item .microupload_progress .microupload_progress_value {
+  height: 8px;
+  background: #00b000;
+  display: inline-block;
+}
+
+.microupload_item .microupload_filename {
+  display: inline-block;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.microupload_item .microupload_cancel {
+  display: inline-block;
+  background: #999999;
+  color: #ffffff;
+  border-radius: 14px;
+  height: 14px;
+  width: 14px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: bold;
+  font-family: Arial, monospace;
+  text-align: center;
+  margin: 0 0 0 5px;
+  cursor: pointer;
+}
+
+.microupload_item .microupload_cancel:hover {
+  color: #ffffff;
+  background: #111111;
+}
+
+.microupload_item_error .microupload_filename {
+  color: red;
+  text-decoration: line-through;
+}
+
+.microupload_item_error .microupload_progress {
+  background: #ff7777;
+}
+
+.microupload_item_error .microupload_progress .microupload_progress_value {
+  background: #b00000;
+}
