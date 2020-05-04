@@ -5,23 +5,23 @@
  *
  * LICENSE:
  *
- * This file is part of microlightbox.
+ * This file is part of microupload.
  *
- * microlightbox is free software: you can redistribute it and/or modify
+ * microupload is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * microlightbox is distributed in the hope that it will be useful,
+ * microupload is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with microlightbox. If not, see <http://www.gnu.org/licenses/>.
+ * along with microupload. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author KyberPrizrak (www.kyberprizrak.ru)
- * @version 0.1.6 - 2020.05.02 14:59:00 GMT+3
+ * @version 0.1.7 - 2020.05.04 14:52:00 GMT+3
  */
 
 (function() {
@@ -67,9 +67,11 @@
         return;
       }
 
-      elm.addEventListener('change', function(event) {
-        microupload_addfiles(event.target.files, opt);
-      });
+      var options = microupload_copy_options(opt);
+
+      elm.onchange = function(event) {
+        microupload_send_files(elm.files, options);
+      }
     } catch (e) {}
   }
 
@@ -82,22 +84,46 @@
    **/
   function microupload_addfiles(files, opt) {
     try {
-      if (typeof(opt) !== 'object') opt = {};
-      if (typeof(opt['url']) !== 'string') opt['url'] = '/upload.php';
-      if (typeof(opt['name']) !== 'string') opt['name'] = 'file';
-      if (!(opt['preview_max_width'] > 0)) opt['preview_max_width'] = 100;
-      if (!(opt['preview_max_height'] > 0)) opt['preview_max_height'] = 100;
-      if (typeof(opt['cancel_text']) !== 'string') opt['cancel_text'] = '&times;';
-      if (typeof(opt['extensions']) !== 'string') opt['extensions'] = '*';
-      if (!(opt['max_file_size'] > 0)) opt['max_file_size'] = 0;
+      microupload_send_files(files, microupload_copy_options(opt));
+    } catch (e) {}
+  }
 
-      if (files) {
-        for (var i = 0; i < files.length; i++) {
-          microupload_send(files[i], opt);
-        }
+  /**
+   * Копирование объекта с настройками
+   * @access private
+   **/
+  function microupload_copy_options(opt) {
+    if (typeof(opt) !== 'object') opt = {};
+    var options = {
+      url: opt['url'] ? opt['url'] : '/upload.php',
+      data: opt['data'],
+      name: opt['name'] ? opt['name'] : 'file',
+      container: opt['container'],
+      preview: opt['preview'],
+      preview_max_width: (opt['preview_max_width'] > 0) ? opt['preview_max_width'] : 100,
+      preview_max_height: (opt['preview_max_height'] > 0) ? opt['preview_max_height'] : 100,
+      cancelable: opt['cancelable'],
+      cancel_text: opt['cancel_text'] ? opt['cancel_text'] : '&times;',
+      extensions: opt['extensions'] ? opt['extensions'] : '*',
+      max_file_size: (opt['max_file_size'] >= 0) ? opt['max_file_size'] : 0,
+      onerror: opt['onerror'],
+      onbeforesubmit: opt['onbeforesubmit'],
+      onprogress: opt['onprogress'],
+      oncomplete: opt['oncomplete'],
+      ontrycancel: opt['ontrycancel']
+    };
+    return options;
+  }
+
+  /**
+   * Отправка массива файлов
+   * @access private
+   **/
+  function microupload_send_files(files, options) {
+    if (files) {
+      for (var i = 0; i < files.length; i++) {
+        microupload_send(files[i], options);
       }
-    } catch (e) {
-      alert('microupload error');
     }
   }
 
@@ -105,11 +131,11 @@
    * Отправка файла
    * @access private
    **/
-  function microupload_send(file, opt) {
+  function microupload_send(file, options) {
     //declare error macros
     var error_macros = function(error_code) {
-      if (opt['onerror']) {
-        opt['onerror'](error_code, file, file_id);
+      if (options.onerror) {
+        options.onerror(error_code, file, file_id);
       }
       if (obj_item) {
         obj_item.className = "microupload_item microupload_item_error";
@@ -121,8 +147,8 @@
     var file_extension = (file_name_pieces[file_name_pieces.length - 1]).toLowerCase();
 
     //check file extension
-    if (opt['extensions'] !== '*') {
-      var extensions_normalized = opt['extensions'].split(',').join('|').toLowerCase();
+    if (options.extensions !== '*') {
+      var extensions_normalized = options.extensions.split(',').join('|').toLowerCase();
       if (('|' + extensions_normalized + '|').indexOf('|' + file_extension + '|') < 0) {
         error_macros("extension");
         return;
@@ -130,7 +156,7 @@
     }
 
     //check file size
-    if ((opt['max_file_size'] > 0) && (file.size > opt['max_file_size'])) {
+    if ((options.max_file_size > 0) && (file.size > options.max_file_size)) {
       error_macros("maxsize");
       return;
     }
@@ -140,92 +166,98 @@
     var file_id = 'microupload_' + (++window['microupload_filenum']) + '_' + Math.random().toString().substr(2, 6);
 
     //add item html-code
-    if (opt['container']) {
-      var obj_container = opt['container'];
+    if (options.container) {
+      var obj_container = options.container;
       if (typeof(obj_container) === 'string') {
         obj_container = document.querySelector(obj_container);
       }
 
-      var obj_item = document.createElement('div');
-      obj_item.id = file_id;
-      obj_item.className = "microupload_item";
-      obj_container.appendChild(obj_item);
+      if (obj_container) {
+        var obj_item = document.createElement('div');
+        obj_item.id = file_id;
+        obj_item.className = "microupload_item";
+        obj_container.appendChild(obj_item);
 
-      if (opt['preview']) {
-        var obj_image_wrapper = document.createElement('div');
-        obj_image_wrapper.className = "microupload_preview microupload_preview_empty";
-        if (window.FileReader) {
-          var reader = new FileReader();
-          reader.onload = function(readerEvent) {
-            var obj_image = new Image();
-            obj_image.onload = function() {
-              var original_width = obj_image.width;
-              var original_height = obj_image.height;
+        if (options.preview) {
+          var obj_image_wrapper = document.createElement('div');
+          obj_image_wrapper.className = "microupload_preview microupload_preview_empty";
+          if (window.FileReader) {
+            var reader = new FileReader();
+            reader.onload = function(readerEvent) {
+              var obj_image = new Image();
+              obj_image.onload = function() {
+                var original_width = obj_image.width;
+                var original_height = obj_image.height;
 
-              if ((original_width > 0) && (original_height > 0)) {
-                if ((original_width > opt['preview_max_width']) || (original_height > opt['preview_max_height'])) {
-                  var dw = opt['preview_max_width'] / original_width;
-                  var dh = opt['preview_max_height'] / original_height;
-                  if (dh > dw) {
-                    obj_image.width = opt['preview_max_width'];
-                    obj_image.height = Math.ceil(original_height * dw);
-                  } else if (original_height > opt['preview_max_height']) {
-                    obj_image.width = Math.ceil(original_width * dh);
-                    obj_image.height = opt['preview_max_height'];
+                if ((original_width > 0) && (original_height > 0)) {
+                  if ((original_width > options.preview_max_width) || (original_height > options.preview_max_height)) {
+                    var dw = options.preview_max_width / original_width;
+                    var dh = options.preview_max_height / original_height;
+                    if (dh > dw) {
+                      obj_image.width = options.preview_max_width;
+                      obj_image.height = Math.ceil(original_height * dw);
+                    } else if (original_height > options.preview_max_height) {
+                      obj_image.width = Math.ceil(original_width * dh);
+                      obj_image.height = options.preview_max_height;
+                    }
+                  }
+
+                  if (obj_image_wrapper) {
+                    obj_image_wrapper.className = "microupload_preview";
+                    obj_image.className = "microupload_preview_img";
+                    obj_image_wrapper.appendChild(obj_image);
                   }
                 }
+              }
+              obj_image.src = readerEvent.target.result;
+            }
+            reader.readAsDataURL(file);
+          }
+          obj_item.appendChild(obj_image_wrapper);
+        }
 
-                if (obj_image_wrapper) {
-                  obj_image_wrapper.className = "microupload_preview";
-                  obj_image.className = "microupload_preview_img";
-                  obj_image_wrapper.appendChild(obj_image);
-                }
+        var obj_filename = document.createElement('div');
+        obj_filename.className = "microupload_filename";
+        obj_filename.innerText = file.name;
+        obj_item.appendChild(obj_filename);
+
+        var obj_progress = document.createElement('div');
+        obj_progress.className = "microupload_progress";
+        obj_item.appendChild(obj_progress);
+
+        var obj_progress_value = document.createElement('div');
+        obj_progress_value.className = "microupload_progress_value";
+        obj_progress_value.style.width = '0';
+        obj_progress_value.innerText = '0%';
+        obj_progress.appendChild(obj_progress_value);
+
+        if (options.cancelable) {
+          var obj_cancel = document.createElement('div');
+          obj_cancel.className = "microupload_cancel";
+          obj_cancel.innerHTML = options.cancel_text;
+          obj_cancel.onclick = function(event) {
+            if (obj_item) {
+              var allow_cancel = (options.ontrycancel) ? options.ontrycancel(file, file_id) : true;
+              if (allow_cancel) {
+                xhr.abort();
+                obj_item.parentElement.removeChild(obj_item);
+              } else {
+                error_macros("ontrycancel");
               }
             }
-            obj_image.src = readerEvent.target.result;
           }
-          reader.readAsDataURL(file);
+          obj_cancel.onselectstart = function(event) {
+            event.preventDefault();
+            return false;
+          }
+          obj_item.appendChild(obj_cancel);
         }
-        obj_item.appendChild(obj_image_wrapper);
-      }
-
-      var obj_filename = document.createElement('div');
-      obj_filename.className = "microupload_filename";
-      obj_filename.innerText = file.name;
-      obj_item.appendChild(obj_filename);
-
-      var obj_progress = document.createElement('div');
-      obj_progress.className = "microupload_progress";
-      obj_item.appendChild(obj_progress);
-
-      var obj_progress_value = document.createElement('div');
-      obj_progress_value.className = "microupload_progress_value";
-      obj_progress_value.style.width = '0';
-      obj_progress_value.innerText = '0%';
-      obj_progress.appendChild(obj_progress_value);
-
-      if (opt['cancelable']) {
-        var obj_cancel = document.createElement('div');
-        obj_cancel.className = "microupload_cancel";
-        obj_cancel.innerHTML = opt['cancel_text'];
-        obj_cancel.addEventListener('click', function(event) {
-          if (obj_item) {
-            var allow_cancel = (opt['ontrycancel']) ? opt['ontrycancel'](file, file_id) : true;
-            if (allow_cancel) {
-              xhr.abort();
-              obj_item.parentElement.removeChild(obj_item);
-            } else {
-              error_macros("ontrycancel");
-            }
-          }
-        });
-        obj_item.appendChild(obj_cancel);
       }
     }
 
     //call onbeforesubmit
-    if (opt['onbeforesubmit']) {
-      if (!opt['onbeforesubmit'](file, file_id)) {
+    if (options.onbeforesubmit) {
+      if (!options.onbeforesubmit(file, file_id)) {
         error_macros("onbeforesubmit");
         return;
       }
@@ -233,20 +265,20 @@
 
     //fill FormData for request
     var fd = new FormData();
-    fd.append(opt['name'], file);
-    if (opt['data']) {
-      for (var prop in opt['data']) {
-        fd.append(prop, opt['data'][prop]);
+    fd.append(options.name, file);
+    if (options.data) {
+      for (var prop in options.data) {
+        fd.append(prop, options.data[prop]);
       }
     }
 
     //make request
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', opt['url'], true);
+    xhr.open('POST', options.url, true);
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4) {
         if (xhr.status == 200) {
-          var flg_complete_ok = (opt['oncomplete']) ? opt['oncomplete'](file, file_id, xhr.responseText) : true;
+          var flg_complete_ok = (options.oncomplete) ? options.oncomplete(file, file_id, xhr.responseText) : true;
           if (flg_complete_ok) {
             if (obj_progress_value) {
               obj_progress_value.innerText = '100%';
@@ -270,8 +302,8 @@
             obj_progress_value.style.width = Math.ceil(percentComplete) + '%';
             obj_progress_value.innerText = Math.ceil(percentComplete) + '%';
           }
-          if (opt['onprogress']) {
-            opt['onprogress'](file, file_id, percentComplete);
+          if (options.onprogress) {
+            options.onprogress(file, file_id, percentComplete);
           }
         }
       }

@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>microupload</title>
     <link rel="stylesheet" href="microupload.css" type="text/css">
-    <script src="microupload.js" type="text/javascript"></script>
+    <script src="microupload.min.js" type="text/javascript"></script>
     <style>
 
       h1 {
@@ -56,7 +56,7 @@
         padding: 0;
         margin: 0;
         border: 0;
-        box-sizing: border-box;
+        position: absolute;
         cursor: pointer;
         width: 0;
         height: 0;
@@ -104,7 +104,7 @@
       }
 
       /* design4 */
-  
+
       .design4 .microupload_item .microupload_cancel {
         background: transparent;
         width: 16px;
@@ -247,12 +247,75 @@
         display: inline-block;
       }
 
+      /* design9 */
+
+      .design9 .microupload_item {
+        width: 200px;
+        height: 25px;
+        border-bottom: 1px solid #ECEFF1;
+        padding: 5px;
+        position: relative;
+      }
+
+      .design9 .microupload_item .microupload_filename {
+        width: 175px;
+        overflow: hidden;
+        vertical-align: top;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: #455A64;
+        display: block;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        z-index: 2;
+      }
+
+      .design9 .microupload_item .microupload_progress {
+        display: block;
+        width: 200px;
+        height: 25px;
+        margin: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        background: transparent;
+      }
+
+      .design9 .microupload_item .microupload_progress .microupload_progress_value {
+        display: block;
+        height: 25px;
+        background: #eceff1;
+      }
+
+      .design9 .microupload_item .microupload_cancel {
+        display: block;
+        right: 5px;
+        position: absolute;
+        top: 5px;
+        z-index: 2;
+      }
+
+      .design9 .microupload_item_error .microupload_filename {
+        color: #ffffff;
+        text-decoration: line-through;
+      }
+
+      .design9 .microupload_item_error .microupload_progress {
+        background: #ff7777;
+      }
+
+      .design9 .microupload_item_error .microupload_progress .microupload_progress_value {
+        background: #b00000;
+      }
+
     </style>
   </head>
   <body>
 
     <select onchange="document.body.className = this.options[this.selectedIndex].value" autocomplete="off">
-      <option value="">standart design</option>
+      <option value="" selected="selected">standart design</option>
       <option value="design2">no progressbar</option>
       <option value="design3">progressbar align left</option>
       <option value="design4">close as icon</option>
@@ -260,6 +323,7 @@
       <option value="design6">preview thumbnail</option>
       <option value="design6 design7">preview thumbnail without file name</option>
       <option value="design8">list</option>
+      <option value="design9">list with background progressbar</option>
     </select>
 
     <h1>Styled input, cancelable, only images, hidden inputs with success uploaded files:</h1>
@@ -281,7 +345,7 @@
       <input type="submit" name="submit" value="Send">
     </form>
 
-    <script>
+    <script type="text/javascript">
 
       /*** form1 sample ***/
 
@@ -331,7 +395,7 @@
         ontrycancel: function(file, file_id) {
           console.log(['ontrycancel', file, file_id]);
           return true;
-        },
+        }
       });
 
       /*** form2 sample ***/
@@ -344,7 +408,7 @@
 
       /*** drag & drop sample ***/
 
-      document.getElementById("form2_textarea").addEventListener('drop', function(event) {
+      document.getElementById("form2_textarea").ondrop = function(event) {
         if (event.dataTransfer.files.length) {
           event.preventDefault();
           microupload_addfiles(event.dataTransfer.files, {
@@ -354,16 +418,16 @@
           });
           this.style.border = '';
         }
-      });
+      };
 
-      document.getElementById('form2_textarea').addEventListener('dragleave', function(event) {
+      document.getElementById('form2_textarea').ondragleave = function(event) {
         this.style.border = '';
-      });
+      };
 
-      document.getElementById('form2_textarea').addEventListener('dragover', function(event) {
+      document.getElementById('form2_textarea').ondragover = function(event) {
         event.preventDefault();
         this.style.border = '2px solid green';
-      });
+      };
 
     </script>
   </body>
